@@ -6,7 +6,7 @@ import { confimAlert, customAlert } from '../../../../config/alerts/alert';
 import AxiosClient from '../../../../config/http-client/axios-client';
 
 const UpdateUserForm = ({ isUpdate, setIsUpdate, getAllUsers, selectedUser }) => {
-    
+
     const closeModal = () => {
         formik.resetForm();
         setIsUpdate(false);
@@ -48,32 +48,26 @@ const UpdateUserForm = ({ isUpdate, setIsUpdate, getAllUsers, selectedUser }) =>
                         },
                     };
                     const response = await AxiosClient({
-                        method: 'UPDATE',
-                        url: '/person/',
-                        data: payload
+                        method: 'PUT', 
+                        url: `/person/${selectedUser.person.id}`, 
+                        data: payload,
                     });
                     if (!response.error) {
-                        customAlert(
-                            'Registro exitoso',
-                            'El usuario se ha registrado correctamente',
-                            'success');
+                        customAlert('Actualización exitosa', 'Los datos del usuario se han actualizado correctamente', 'success');
                         getAllUsers();
                         closeModal();
                     }
                 } catch (error) {
-                    customAlert(
-                        'Ocurrio un error',
-                        'Error al registrar usuario',
-                        'error')
+                    customAlert('Ocurrió un error', 'Error al actualizar usuario', 'error');
                     console.log(error);
                 } finally {
-
+                    setSubmitting(false);
                 }
             });
-        }
-    })
+        },
+    });
 
-     useEffect(() => {
+    useEffect(() => {
         if (selectedUser) {
             formik.setValues({
                 username: selectedUser.username || '',
